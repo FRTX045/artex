@@ -44,8 +44,10 @@ comparison, and CI runs it on Linux.
 
 ## Required checks
 
-- All Go packages are tested without external provider/database configuration;
-  database-dependent tests may skip in that job.
+- Every discovered Go test runs in its own process and fresh PostgreSQL database;
+  no test is excluded by name. The local run passed 665 tests with zero failures.
+  `TestLiveContextReview` skipped because no live model was configured. Database
+  unavailability skips are treated as failures by the runner.
 - A separate fresh-PostgreSQL job checks deterministic host-tool ordering,
   task/API lifecycle, fail-closed authentication and disabled update behavior.
 - Shell verification failure injection, entrypoint lifecycle and dependency
@@ -57,11 +59,14 @@ comparison, and CI runs it on Linux.
   raw SYN scanning of the container's own listening port, graceful SIGTERM and
   JWT validity after restart. It publishes no ports and supplies no LLM key.
 
-The full database-backed suite previously exposed scope-context, metering-table
-setup and background cleanup failures on unchanged main. The focused integration
-job does not replace that suite or resolve those issues. They remain follow-up
-work; they must not be hidden through claims that every database regression is
-green.
+The prior shared-database suite exposed an obsolete assertion against
+`coverage.scope`, a missing metering-table fixture setup and background fixture
+contamination. The scope regression now verifies every configured rule through
+the existing `list_companies` agent tool and retains the asset/backlog/worker
+checks. The metering test performs the same table setup as normal application
+startup. Fresh process/database isolation prevents one test's saved tasks and
+provider settings from being reloaded by another. These are test corrections;
+they do not remove scope data or change production database initialization.
 
 ## Security limits
 
