@@ -296,7 +296,7 @@ coverage 每轮导出：`__API_RECON_LOG__`、`__API_RECON_DETAIL__`、`__API_RE
 验证：`window.__API_RECON_PRELOAD__` 存在；业务 path 不回 `/login`。
 
 ```bash
-cd recon && npm install
+cd recon && sh ensure-runtime.sh
 node runtime_harvest.js config.json
 ```
 
@@ -423,3 +423,8 @@ stub 检查：外层 `response_code` 与拦截器门一致；flat codes 与 tree
 
 - Grep 配方、`config.json` 模板、排障、Hook、参数逆向 J 节、site_map 模板：**[reference.md](reference.md)**
 - 参考脚本路径见 [脚本与门禁](#脚本与门禁) 表
+
+
+### Runtime dependency setup
+
+Copy `ensure-runtime.sh`, `package.json`, `package-lock.json`, and `.npmrc` with the runtime scripts. In the built image, `ensure-runtime.sh` verifies the absolute `ARTEX_PUPPETEER_PATH` and fails if it is unavailable; it does not fall back to a network install. Outside the image, the helper explicitly installs from the copied official lockfile with lifecycle scripts disabled.

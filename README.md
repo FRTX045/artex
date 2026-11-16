@@ -77,7 +77,7 @@ docker compose --env-file .env.safe -f docker-compose.safe.yml down -v
 | Browser automation | Node 22 + Playwright + Chromium | same, pinned versions |
 | Browser MCP launcher | `npx @playwright/mcp` | pinned `playwright-mcp` |
 | Capabilities | default Docker set | default Docker set + `no-new-privileges` |
-| Self-update | points at upstream | points at this fork; one-click update disabled |
+| Self-update | points at upstream | compiled off; no remote check or download |
 | Base images | floating tags | pinned by digest |
 
 The API, UI, skills, browser MCP, and browser-driven recon are unchanged.
@@ -101,7 +101,7 @@ cp -R web/out/. server/webui/dist/
 
 CGO_ENABLED=0 go build \
   -trimpath -buildvcs=false -tags embedui \
-  -ldflags="-buildid= -X main.version=v0.3.15-failsafe.1" \
+  -ldflags="-buildid= -X main.version=v0.3.15-failsafe.2" \
   -o artex ./cmd/artex
 ```
 

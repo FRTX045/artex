@@ -60,7 +60,15 @@ changes below. The web UI source is unchanged.
    `@latest` download, and Chromium startup failures as root. The MCP is still
    seeded disabled and remains an admin-enabled feature.
 
-No other application logic was changed.
+8. **Reviewed prompt-cache backport** — the per-intent artifact path and task
+   block are placed after the stable worker prompt and deferred-tool block.
+   Deferred host-tool names are sorted before rendering. This backports the
+   small cache fix from PR #10 without importing v0.3.30, changing asset queries,
+   or weakening deployment isolation. Custom prompt variables still render on
+   each run. Deterministic inputs are necessary for a stable prefix.
+
+The online-update and API-recon changes below are additional deliberate
+differences. No v0.3.30 application upgrade is included.
 
 ## The incident this fork responds to
 
@@ -99,3 +107,12 @@ See:
 
 - Source: https://github.com/RuoJi6/ARTEX
 - License: https://www.gnu.org/licenses/agpl-3.0.html
+
+## Local online update hardening
+
+Online release checks and downloads are disabled by `selfupdate.Enabled = false`, independently of the version string. The fixed repository identifier and derived URL remain for source clarity, but FetchLatest and Stage refuse before network access. Update API check reports disabled; apply and rollback return 403. Local staged-file bootstrap recovery remains available. Deployment updates require a reviewed source rebuild. Earlier descriptions of version-suffix-only disabling are historical.
+
+
+## Local API recon supply chain hardening
+
+The API-recon runtime lockfile, module loader, and dependency setup instructions deliberately differ from upstream. Puppeteer is pinned to 25.17.0, fetched from the official npm registry with integrity checks and lifecycle scripts disabled, and preinstalled at image build time. The image uses an absolute module path; missing image dependencies fail without a runtime install. General skill translations are excluded. The previous skills-tree and image hashes remain historical and must be replaced with results from the final release build before promotion.

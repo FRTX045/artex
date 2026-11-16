@@ -73,8 +73,8 @@ scope, rules of engagement, and applicable law.
 3. **Root runtime and browser surface.** The container runs as root to preserve
    upstream capability, and Chromium parses untrusted web content. Do not run it
    on a host with sensitive data, and keep the console loopback-only.
-4. **No signature verification on self-update.** One-click update is disabled
-   by the embedded version suffix. Do not re-enable it against an untrusted
+4. **No signature verification on self-update.** Online update checks and downloads are disabled
+   by the compile-time `selfupdate.Enabled = false` constant. Do not re-enable it against an untrusted
    feed.
 5. **Browser sandboxing.** Chromium runs as root with `--no-sandbox` for
    reliable startup, so the browser's own sandbox is not a security boundary

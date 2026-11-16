@@ -1,5 +1,10 @@
 # ARTEX v0.3.15 — FailSafe Build Audit
 
+This is the historical audit of the original FailSafe build. Its artifact hashes
+do not describe the later `v0.3.15-failsafe.2` build. The reviewed runtime and
+prompt-cache changes are documented in `docs/reviewed-runtime-validation.md`;
+use the final build's CI output for its binary hash and image ID.
+
 **Date:** 2026-11-10
 **Scope:** the `v0.3.15` source tag imported from `RuoJi6/ARTEX`, the
 `Dockerfile.safe` build, and the resulting `failsafe-security/artex:v0.3.15-safe`

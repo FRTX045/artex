@@ -40,7 +40,7 @@ RUN CGO_ENABLED=0 go build \
       -trimpath \
       -buildvcs=false \
       -tags embedui \
-      -ldflags="-buildid= -X main.version=v0.3.15-failsafe.1" \
+      -ldflags="-buildid= -X main.version=v0.3.15-failsafe.2" \
       -o /out/artex ./cmd/artex
 
 FROM ${PYTHON_IMAGE} AS runtime
@@ -64,7 +64,7 @@ RUN ln -sf ../lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm \
 # Install the same browser stack as upstream, pinned. Install Chromium for the
 # top-level Playwright and for the nested copies used by MCP and CLI.
 ENV PLAYWRIGHT_BROWSERS_PATH=/ms-playwright
-RUN npm install -g \
+RUN npm install -g --ignore-scripts --registry=https://registry.npmjs.org/ \
       @playwright/mcp@${PLAYWRIGHT_MCP_VERSION} \
       @playwright/cli@${PLAYWRIGHT_CLI_VERSION} \
       playwright@${PLAYWRIGHT_VERSION} \
@@ -86,6 +86,21 @@ RUN set -eux; \
     chmod -R a+rX /ms-playwright; \
     "$CHROME_BIN" --version
 
+# Preinstall the api-recon skill's Node runtime from its lockfile (official
+# registry, integrity-checked, no lifecycle scripts) so the agent never has to
+# run `npm install` at runtime. runtime_harvest.js resolves it by the absolute
+# ARTEX_PUPPETEER_PATH below, so a node_modules/ in a scanned workspace cannot
+# shadow it.
+COPY skills/api-recon/scripts/package.json skills/api-recon/scripts/package-lock.json skills/api-recon/scripts/.npmrc /opt/api-recon-runtime/
+# jq guard: every resolved URL in the lockfile must be the official registry.
+# Parsing the JSON is robust to formatting (unlike a line grep). jq is installed
+# above.
+RUN cd /opt/api-recon-runtime \
+    && jq -e '[.packages[].resolved? // empty] | all(startswith("https://registry.npmjs.org/"))' package-lock.json > /dev/null \
+    && npm ci --ignore-scripts \
+    && npm cache clean --force \
+    && rm -rf /root/.npm
+
 WORKDIR /app
 COPY --from=go-builder /out/artex /app/artex
 COPY start.sh /app/start.sh
@@ -99,6 +114,7 @@ RUN chmod +x /app/artex /app/start.sh \
 # no-new-privileges and binds the console to loopback.
 ENV PLAYWRIGHT_BROWSERS_PATH=/ms-playwright \
     NODE_PATH=/usr/local/lib/node_modules \
+    ARTEX_PUPPETEER_PATH=/opt/api-recon-runtime/node_modules/puppeteer-core \
     TMPDIR=/tmp \
     NORMA_RIPGREP_NO_INSTALL=1 \
     NEXT_TELEMETRY_DISABLED=1
