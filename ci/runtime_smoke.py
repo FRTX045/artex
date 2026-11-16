@@ -13,7 +13,10 @@ pg, app, data, keys = (name + suffix for suffix in ('-pg', '-app', '-data', '-ke
 
 
 def docker(*args, check=True, input=None):
-    return subprocess.run(['docker', *args], check=check, input=input, text=True, capture_output=True, timeout=180)
+    result = subprocess.run(['docker', *args], input=input, text=True, capture_output=True, timeout=180)
+    if check and result.returncode:
+        raise RuntimeError(f'docker {args[0]} failed ({result.returncode}):\n{result.stdout}\n{result.stderr}')
+    return result
 
 
 def api(path, method='GET', payload=None, token=None):

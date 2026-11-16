@@ -20,6 +20,10 @@ container permissions.
   official registry. The CLI fallback instruction uses the existing exact
   version rather than `@latest`. Global browser transitive dependencies and apt
   packages are still ecosystem-trusted; this is not a fully hermetic build.
+- The pinned MCP launcher is pointed at the bundled `/usr/bin/chromium` through
+  its documented executable-path environment setting. This avoids selecting a
+  separate Chrome channel that is not installed in the image. Explicit user
+  command-line browser settings retain their usual precedence.
 
 ## Local performance comparison
 

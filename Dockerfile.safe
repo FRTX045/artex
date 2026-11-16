@@ -113,6 +113,7 @@ RUN chmod +x /app/artex /app/start.sh \
 # Upstream runs as root; keep that for tool parity. compose adds
 # no-new-privileges and binds the console to loopback.
 ENV PLAYWRIGHT_BROWSERS_PATH=/ms-playwright \
+    PLAYWRIGHT_MCP_EXECUTABLE_PATH=/usr/bin/chromium \
     NODE_PATH=/usr/local/lib/node_modules \
     ARTEX_PUPPETEER_PATH=/opt/api-recon-runtime/node_modules/puppeteer-core \
     TMPDIR=/tmp \
