@@ -11,6 +11,20 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine@sha256:0cefaabd882e42bcb2a2f3dc56d3ce4770560ba62fd7f197f1a2e008fd5731ab
+        env:
+          POSTGRES_USER: artex
+          POSTGRES_PASSWORD: regression-fixture
+          POSTGRES_DB: artex
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U artex"
+          --health-interval 5s --health-timeout 3s --health-retries 20
+    env:
+      ARTEX_TEST_ADMIN_DSN: postgres://artex:regression-fixture@127.0.0.1:5432/artex?sslmode=disable
     steps:
       - uses: actions/checkout@v4
       - name: Test entrypoint shutdown and restart handling
@@ -25,8 +39,13 @@ jobs:
           go-version: "1.26.10"
           cache: true
       - run: go vet ./...
-      - name: Test all Go packages without external configuration
-        run: go test ./...
+      - name: Run every Go test with fresh PostgreSQL state
+        run: python3 ci/go-tests-isolated.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: go-regression-results
+          path: artifacts/go-tests
       - name: Benchmark worker prompt assembly
         run: go test ./agent -run '^$' -bench BenchmarkWorkerPromptAssembly -benchmem -count 5
 

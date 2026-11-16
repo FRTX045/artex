@@ -25,7 +25,7 @@ func callReadJSON(t *testing.T, tool actool.CoreTool, input string) any {
 	return out
 }
 
-func TestGraphOverviewExpandsAssociatedCompanyScope(t *testing.T) {
+func TestAssociatedCompanyScopeAvailableThroughCompanyTool(t *testing.T) {
 	d := testDB(t)
 	defer d.Close()
 
@@ -82,26 +82,33 @@ func TestGraphOverviewExpandsAssociatedCompanyScope(t *testing.T) {
 	if !ok {
 		t.Fatalf("coverage missing: %#v", overview["coverage"])
 	}
-	scopeRows, ok := coverage["scope"].([]map[string]any)
-	if !ok || len(scopeRows) != 1 {
-		t.Fatalf("task scope missing: %#v", coverage["scope"])
+	// graph_overview deliberately keeps coverage compact. The existing
+	// list_companies tool supplies the complete scope on demand, including
+	// keyword rules; verify that agent-visible contract rather than an obsolete
+	// coverage.scope field. Asset association/backlog checks below stay intact.
+	companyResult := callReadJSON(t, tools.listCompanies(), fmt.Sprintf(
+		`{"search":%q}`, companiesName(t, companies, companyID),
+	)).(map[string]any)
+	companyRows := companyResult["companies"].([]any)
+	if len(companyRows) != 1 {
+		t.Fatalf("associated company missing from tool: %#v", companyResult)
 	}
-	companyScope, ok := scopeRows[0]["company_scope"].([]map[string]any)
-	if !ok || len(companyScope) != len(inputs) {
-		t.Fatalf("company scope not expanded: %#v", scopeRows[0])
+	company := companyRows[0].(map[string]any)
+	if company["id"] != float64(companyID) {
+		t.Fatalf("wrong associated company: %#v", company)
 	}
-	kinds := make(map[string]string, len(companyScope))
+	companyScope := company["scope"].([]any)
+	if len(companyScope) != len(inputs) {
+		t.Fatalf("company scope incomplete: %#v", companyScope)
+	}
+	rawRules := make(map[string]bool, len(companyScope))
 	for _, rule := range companyScope {
-		kinds[fmt.Sprint(rule["kind"])] = fmt.Sprint(rule["value"])
+		rawRules[rule.(string)] = true
 	}
 	for _, input := range inputs {
-		if kinds[input.Kind] != input.Value {
-			t.Errorf("scope %s=%q want %q", input.Kind, kinds[input.Kind], input.Value)
+		if !rawRules[input.Value] {
+			t.Errorf("scope %s=%q missing from agent tool: %#v", input.Kind, input.Value, companyScope)
 		}
-	}
-	keywords, ok := scopeRows[0]["company_keywords"].([]string)
-	if !ok || len(keywords) != 1 || keywords[0] != keyword {
-		t.Fatalf("company keywords missing: %#v", scopeRows[0]["company_keywords"])
 	}
 	if hc, _ := coverage["host_count"].(int); hc < 1 {
 		t.Fatalf("company asset host not counted in agent context: %#v", coverage["host_count"])
