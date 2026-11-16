@@ -42,13 +42,12 @@ forward() {
 }
 trap forward INT TERM
 
-delay=1
-while :; do
-	"$BIN" "$@" &
-	child=$!
-
-	# 信号会打断 wait 并让它返回 >128。此时子进程其实还在做优雅关闭，
-	# 必须再 wait 一次才能拿到它真正的退出码。
+# Wait for either the application or its restart delay. A stop that arrived
+# between starting the child and recording its PID must reach that child too.
+wait_for_child() {
+	if [ "$stopping" -eq 1 ]; then
+		kill -TERM "$child" 2>/dev/null || true
+	fi
 	wait "$child"
 	code=$?
 	if [ "$code" -gt 128 ]; then
@@ -56,6 +55,16 @@ while :; do
 		code=$?
 	fi
 	child=0
+}
+
+delay=1
+while [ "$stopping" -eq 0 ]; do
+	"$BIN" "$@" &
+	child=$!
+
+	# 信号会打断 wait 并让它返回 >128。此时子进程其实还在做优雅关闭，
+	# 必须再 wait 一次才能拿到它真正的退出码。
+	wait_for_child
 
 	if [ "$stopping" -eq 1 ]; then
 		echo "[artex] 已停止"
@@ -74,9 +83,13 @@ while :; do
 			;;
 		*)
 			echo "[artex] 异常退出 (code=$code)，${delay}s 后重启" >&2
-			sleep "$delay"
+			sleep "$delay" &
+			child=$!
+			wait_for_child
 			delay=$((delay * 2))
 			[ "$delay" -gt "$MAX_DELAY" ] && delay=$MAX_DELAY
 			;;
 	esac
 done
+echo "[artex] 已停止"
+exit 0
