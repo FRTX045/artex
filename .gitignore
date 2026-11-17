@@ -12,3 +12,7 @@ web/out/
 web/.next/
 server/webui/dist/
 .DS_Store
+# Local runtime configuration and signing material (never commit)
+config.json
+keys/
+*.key

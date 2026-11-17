@@ -67,6 +67,24 @@ changes below. The web UI source is unchanged.
    or weakening deployment isolation. Custom prompt variables still render on
    each run. Deterministic inputs are necessary for a stable prefix.
 
+9. **Static UI delivery** — `server/static_files.go` compresses the embedded
+   frontend (Brotli, gzip fallback), emits content-hash ETags, marks the
+   content-hashed `/_next/static/` tree immutable, and revalidates everything
+   else. A missing build asset now returns 404 instead of the SPA document.
+   Upstream served the `embed.FS` through `http.ServeFileFS`, which sent the
+   multi-megabyte bundle uncompressed with no validator; direct `:8787`
+   deployments (our compose file) re-downloaded it on every navigation and
+   stalled behind the browser's six-connections-per-host limit, which presents
+   as the UI timing out after every click. Reproduced with headless Chrome;
+   covered by unit tests and `ci/e2e_binary.py`.
+
+10. **English interface and documentation** — the web console's user-visible
+    strings and comments, agent-facing skills, shell/script comments, and
+    project documentation are translated to English. Backend-generated log and
+    error messages remain in their original language in this release; the UI
+    translates its own labels, states, and validation text. Protocol values,
+    parser tokens, and API field names were not renamed.
+
 The online-update and API-recon changes below are additional deliberate
 differences. No v0.3.30 application upgrade is included.
 

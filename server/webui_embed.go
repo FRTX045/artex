@@ -21,11 +21,17 @@ var webuiDist embed.FS
 // webuiHandler serves the embedded SPA. Public (no JWT) — auth is enforced
 // client-side and on /api. Serves the exported per-route index.html files and
 // falls back to index.html so client-side routing still resolves unknown paths.
+//
+// staticFileServer adds gzip/brotli and ETag/immutable caching, which an
+// embed.FS otherwise lacks. Without them a direct :8787 deployment (our compose
+// file) re-downloads the multi-megabyte uncompressed bundle on every navigation,
+// so clicks appear to time out on a remote link. Serving behind nginx hid this.
 func (s *Server) webuiHandler() http.Handler {
 	root, err := fs.Sub(webuiDist, "webui/dist")
 	if err != nil {
 		panic(err)
 	}
+	files := newStaticFileServer(root)
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		p := strings.TrimPrefix(path.Clean(r.URL.Path), "/")
 		if p == "" {
@@ -36,25 +42,20 @@ func (s *Server) webuiHandler() http.Handler {
 		// 3) <p>.html
 		// 4) SPA 兜底 → index.html（交给客户端路由）
 		for _, cand := range []string{p, p + "/index.html", p + ".html"} {
-			if serveFileIfExists(w, r, root, cand) {
+			if files.serveFileIfExists(w, r, cand) {
 				return
 			}
 		}
-		http.ServeFileFS(w, r, root, "index.html")
+		// A missing content-hashed build asset is a real 404, never the SPA
+		// document: returning HTML with a 200 makes the browser parse it as
+		// JavaScript and hides a broken deployment.
+		if strings.HasPrefix(p, "_next/") {
+			http.NotFound(w, r)
+			return
+		}
+		if files.serveFileIfExists(w, r, "index.html") {
+			return
+		}
+		http.NotFound(w, r)
 	})
-}
-
-// serveFileIfExists serves name from fsys when it exists as a regular file.
-func serveFileIfExists(w http.ResponseWriter, r *http.Request, fsys fs.FS, name string) bool {
-	f, err := fsys.Open(name)
-	if err != nil {
-		return false
-	}
-	st, statErr := f.Stat()
-	_ = f.Close()
-	if statErr != nil || st.IsDir() {
-		return false
-	}
-	http.ServeFileFS(w, r, fsys, name)
-	return true
 }

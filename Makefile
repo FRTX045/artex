@@ -2,7 +2,7 @@ IMAGE ?= failsafe-security/artex:v0.3.15-safe
 COMPOSE_BIN ?= $(shell if docker compose version >/dev/null 2>&1; then echo "docker compose"; else echo "docker-compose"; fi)
 COMPOSE ?= $(COMPOSE_BIN) --env-file .env.safe -f docker-compose.safe.yml
 
-.PHONY: build up down logs ps verify shell test clean
+.PHONY: build up down logs ps verify shell test e2e clean
 
 build:
 	docker build -f Dockerfile.safe -t $(IMAGE) .
@@ -46,6 +46,12 @@ verify:
 
 test:
 	go test ./...
+
+# Exercise a locally built single binary (with -tags embedui) end to end.
+# ARTEX_PG_DSN must point at an empty test database.
+e2e:
+	@test -n "$(ARTEX_PG_DSN)" || { echo "ARTEX_PG_DSN is required (empty test database)" >&2; exit 1; }
+	python3 ci/e2e_binary.py ./artex
 
 clean:
 	$(COMPOSE) down -v

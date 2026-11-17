@@ -6,73 +6,73 @@
 > prebuilt-image deployment. Do not follow its Docker or installer instructions
 > in this fork. Use [`README.md`](README.md) instead.
 
-AI 自主渗透测试系统（Go 后端 + Next.js 前端）
+Autonomous AI penetration testing system (Go backend + Next.js frontend)
 
 
-🌐 **在线 Demo**： [https://artex-demo.vercel.app/](https://artex-demo.vercel.app/)
+🌐 **Online Demo**: [https://artex-demo.vercel.app/](https://artex-demo.vercel.app/)
 
 </div>
 
-本仓库为独立维护的 [RuoJi6/ARTEX](https://github.com/RuoJi6/ARTEX)，保留 ARTEX 的原始提交历史与 AGPL-3.0 许可证。程序发布包从本仓库 Releases 下载，Docker 镜像 [ruoji6/artex](https://hub.docker.com/r/ruoji6/artex) 由本仓库 GitHub Actions 构建并发布。
+This repository is an independently maintained fork of [RuoJi6/ARTEX](https://github.com/RuoJi6/ARTEX), retaining ARTEX's original commit history and AGPL-3.0 license. Release packages are downloaded from this repository's Releases, and the Docker image [ruoji6/artex](https://hub.docker.com/r/ruoji6/artex) is built and published by this repository's GitHub Actions.
 
 ---
 
-## 截图预览
+## Screenshots
 
-> 完整交互见[在线 Demo](https://artex-demo.vercel.app/)。
+> See the [online demo](https://artex-demo.vercel.app/) for the full interaction.
 
-| 仪表盘（总览 / Token 消耗 / 活动流） | 任务列表 |
+| Dashboard (Overview / Token Usage / Activity Stream) | Tasks |
 | :---: | :---: |
-| ![仪表盘](screenshots/dashboard.png) | ![任务](screenshots/tasks.png) |
+| ![Dashboard](screenshots/dashboard.png) | ![Tasks](screenshots/tasks.png) |
 
-| 任务 · 执行过程（会话 / 工具调用） | 探索链路 |
+| Task · Execution (Sessions / Tool Calls) | Exploration Graph |
 | :---: | :---: |
-| ![执行过程](screenshots/sessions.png) | ![探索链路](screenshots/graph.png) |
+| ![Execution](screenshots/sessions.png) | ![Exploration Graph](screenshots/graph.png) |
 
-| 发现 | 资产 |
+| Findings | Assets |
 | :---: | :---: |
-| ![发现](screenshots/findings.png) | ![资产](screenshots/assets.png) |
+| ![Findings](screenshots/findings.png) | ![Assets](screenshots/assets.png) |
 
-| 资产覆盖图（力导向布局 · 已测高亮 · 节点折叠展开） |
+| Asset Coverage Map (force-directed layout · tested nodes highlighted · collapsible nodes) |
 | :---: |
-| ![资产覆盖图](screenshots/assets_test.png) |
+| ![Asset Coverage Map](screenshots/assets_test.png) |
 
-| 流量录制 | 人在环路对话 |
+| Traffic Recording | Human-in-the-loop Chat |
 | :---: | :---: |
-| ![流量](screenshots/traffic.png) | ![对话](screenshots/chat.png) |
+| ![Traffic](screenshots/traffic.png) | ![Chat](screenshots/chat.png) |
 
-| Agent 管理 | LLM 配置 |
+| Agents | LLM |
 | :---: | :---: |
-| ![Agent](screenshots/agents.png) | ![LLM](screenshots/llm.png) |
+| ![Agents](screenshots/agents.png) | ![LLM](screenshots/llm.png) |
 
-| 拦截审批 | 后端日志 |
+| Intercept Approvals | Backend Logs |
 | :---: | :---: |
-| ![拦截](screenshots/intercept.png) | ![日志](screenshots/logs.png) |
+| ![Intercept](screenshots/intercept.png) | ![Logs](screenshots/logs.png) |
 
 
 ---
 
-## 审批记录详情
+## Approval record details
 
-全局「审批记录」、任务内「拦截审批」及对话中的审批卡片均支持展开查看详情。展示结构参考
-[AegisHook 的审批详情组件](https://github.com/RuoJi6/AegisHook/blob/main/web/src/components/CallDetail.vue)，沿用 ARTEX 的组件和主题：
+The global "Approval Records" page, a task's "Intercept Approvals" tab, and approval cards in conversations can all be expanded to view details. The presentation follows
+[AegisHook's approval detail component](https://github.com/RuoJi6/AegisHook/blob/main/web/src/components/CallDetail.vue), using ARTEX's components and theme:
 
 
-## 资产同步（ScopeSentry）
+## Asset sync (ScopeSentry)
 
-支持从 [ScopeSentry](https://github.com/Autumn-27/ScopeSentry) 直接同步资产数据，免去重复收集：
+Supports syncing asset data directly from [ScopeSentry](https://github.com/Autumn-27/ScopeSentry), avoiding duplicate collection:
 
-- 在「**资产同步**」页填 ScopeSentry 的地址与 API Key，接入数据源；
-- 按**项目**或**任务**维度选择要同步的目标与资产类型（域名 / 子域 / IP / 端口 / 站点 / 端点…）；
-- 一键导入并按公司资产范围归并，直接进入 ARTEX 的资产图供 agent 探索使用。
+- On the "**Asset Sync**" page, enter ScopeSentry's address and API Key to connect the data source;
+- Select the targets and asset types to sync by **project** or **task** (domain / subdomain / IP / port / site / endpoint…);
+- Import in one click and merge by company asset scope, feeding directly into ARTEX's asset graph for the agent to explore.
 
 ---
 
-## 安装
+## Installation
 
-> 依赖数据库 **PostgreSQL**；探索需配置 **LLM**（`ANTHROPIC_API_KEY` 或 `OPENAI_API_KEY`，也可在 UI 里配）。
+> Depends on a **PostgreSQL** database; exploration requires an **LLM** (`ANTHROPIC_API_KEY` or `OPENAI_API_KEY`, which can also be configured in the UI).
 
-### 方式一：一键安装脚本（推荐）
+### Option 1: One-click install script (recommended)
 
 ```bash
 git clone https://github.com/RuoJi6/ARTEX.git
@@ -80,66 +80,66 @@ cd ARTEX
 ./install.sh
 ```
 
-脚本会：检测 / 自动安装 Docker → 让你选 **① 全部 Docker** 或 **② 本地编译运行**：
+The script will: detect / automatically install Docker → let you choose **① all Docker** or **② local build and run**:
 
-- **① 全部 Docker**：填一个 Postgres 密码（可回车随机）→ 自动写 `.env` → `docker compose up -d`。
-- **② 本地运行**：选数据库（连已有 / 用 Docker 起一个）→ 生成 `config.json` → `go` 编译内嵌单二进制 → 启动。
+- **① All Docker**: enter a Postgres password (press Enter for a random one) → automatically write `.env` → `docker compose up -d`.
+- **② Local run**: choose a database (use an existing one / start one with Docker) → generate `config.json` → compile the embedded single binary with `go` → start.
 
-装好后打开 **http://localhost:8787**（首次进入 `/setup` 设置管理员密码）。
+After installation, open **http://localhost:8787** (on first visit, `/setup` asks you to set the administrator password).
 
-### 方式二：Docker Compose（手动）
+### Option 2: Docker Compose (manual)
 
 ```bash
 git clone https://github.com/RuoJi6/ARTEX.git
 cd ARTEX
-cp .env.example .env          # 填 POSTGRES_PASSWORD、可选 ANTHROPIC_API_KEY
-docker compose up -d          # 拉取 ruoji6/artex 镜像 + postgres
+cp .env.example .env          # fill in POSTGRES_PASSWORD, optionally ANTHROPIC_API_KEY
+docker compose up -d          # pull the ruoji6/artex image + postgres
 # → http://localhost:8787
 ```
 
-镜像已含常用工具（ripgrep/curl/vim/npm/nmap…）；`./skills` 与 `./data` 以绑定挂载持久化。
+The image already includes common tools (ripgrep/curl/vim/npm/nmap…); `./skills` and `./data` are persisted via bind mounts.
 
-`.env` 中默认 `ARTEX_IMAGE=ruoji6/artex`，`ARTEX_TAG=latest` 使用最新镜像，也可固定为 `v0.3.15`（完整镜像地址 `ruoji6/artex:v0.3.15`）。镜像支持 `linux/amd64` 和 `linux/arm64`，Docker 会自动选择与宿主机匹配的架构，ARM64 Kali 无需自行编译。初次部署请修改 `POSTGRES_PASSWORD`；运行服务无需配置 Docker Hub 发布 Token。
+In `.env`, the defaults are `ARTEX_IMAGE=ruoji6/artex` and `ARTEX_TAG=latest` for the latest image; you can also pin `v0.3.15` (the full image reference is `ruoji6/artex:v0.3.15`). The image supports `linux/amd64` and `linux/arm64`; Docker automatically picks the architecture matching the host, so ARM64 Kali needs no local build. Change `POSTGRES_PASSWORD` on first deployment; no Docker Hub publishing token is needed to run the service.
 
-远程 MCP 可在系统设置中选择 `http`（Streamable HTTP）或 `sse`（旧版 SSE）。
-旧版 SSE 服务通常使用 `GET /sse` 建立事件流，再通过服务返回的
-`/message?sessionId=...` 接收 JSON-RPC 请求；配置时将 URL 填为 `/sse`，请求头按
-`Authorization=Bearer <token>` 填写。
+Remote MCP can use `http` (Streamable HTTP) or `sse` (legacy SSE) in System Settings.
+Legacy SSE services typically use `GET /sse` to establish the event stream, then receive JSON-RPC requests through the
+`/message?sessionId=...` returned by the service; when configuring, fill in the URL as `/sse` and the request header as
+`Authorization=Bearer <token>`.
 
-### 方式三：下载预编译二进制（Releases）
+### Option 3: Download a prebuilt binary (Releases)
 
-到本仓库的 [Releases](https://github.com/RuoJi6/ARTEX/releases) 下载对应平台的 zip，解压后得到 `artex` + `start.sh`（Windows 为 `start.bat`）+ `skills/` + `config.example.json`。Linux ARM64（包括 ARM64 Kali）选择 `linux-arm64`，x86_64 选择 `linux-amd64`：
+Go to this repository's [Releases](https://github.com/RuoJi6/ARTEX/releases), download the zip for your platform, and extract it to get `artex` + `start.sh` (Windows: `start.bat`) + `skills/` + `config.example.json`. For Linux ARM64 (including ARM64 Kali) choose `linux-arm64`; for x86_64 choose `linux-amd64`:
 
 ```bash
-cp config.example.json config.json   # 填好 database 连接
+cp config.example.json config.json   # fill in the database connection
 ./start.sh                           # → http://localhost:8787
 ```
 
-> 请用 `start.sh` / `start.bat` 启动，而不是直接跑 `./artex`。它是个守护脚本：程序退出后按退出码决定是否重新拉起，**页面上的[一键更新](#方式一页面一键更新推荐)靠它完成换装**。直接运行 `./artex` 时更新完就不会被拉起了。
-> 后台常驻：`nohup ./start.sh >artex.log 2>&1 &`。
+> Start with `start.sh` / `start.bat`, not by running `./artex` directly. It is a supervisor script: after the program exits, it decides from the exit code whether to relaunch, and **the [one-click update](#option-1-one-click-update-in-the-ui-recommended) in the UI relies on it to perform the swap**. If you run `./artex` directly, it will not be relaunched after an update.
+> To keep it running in the background: `nohup ./start.sh >artex.log 2>&1 &`.
 
-### 方式四：从源码编译单二进制
+### Option 4: Build a single binary from source
 
 ```bash
-# 1) 前端静态导出
+# 1) Export the frontend static build
 cd web && npm ci && npm run build:static && cd ..
-# 2) 拷进内嵌目录
+# 2) Copy it into the embedded directory
 cp -r web/out server/webui/dist
-# 3) 编译（-tags embedui 才内嵌前端）
+# 3) Build (only -tags embedui embeds the frontend)
 CGO_ENABLED=0 go build -tags embedui -o artex ./cmd/artex
 ./start.sh
 ```
 
-### 方式五：构建跨平台 Release 压缩包
+### Option 5: Build cross-platform release archives
 
-`build.sh` 会先构建并嵌入前端，再使用 Go linker 去除调试信息，并将发布文件压缩为 zip。Release 模式默认生成 Linux amd64/arm64、macOS amd64/arm64 和 Windows amd64 的 zip 包：
+`build.sh` first builds and embeds the frontend, then uses the Go linker to strip debug information and compresses the release files into zips. Release mode by default produces zips for Linux amd64/arm64, macOS amd64/arm64, and Windows amd64:
 
 ```bash
 ./build.sh --release
-# 产物：dist/artex-0.3.3-*.zip
+# Output: dist/artex-0.3.3-*.zip
 ```
 
-UPX 自解压二进制可能与部分 Linux 内核、虚拟化环境或安全策略不兼容，因此默认不启用。可用 `ARTEX_TARGETS` 自定义目标；确认目标运行环境兼容时，可显式传入 `--upx` 进一步缩小二进制：
+UPX self-extracting binaries may be incompatible with some Linux kernels, virtualization environments, or security policies, so UPX is disabled by default. Use `ARTEX_TARGETS` to customize targets; when you have confirmed that the target runtime is compatible, pass `--upx` explicitly to shrink the binary further:
 
 ```bash
 ARTEX_TARGETS=linux/amd64,windows/amd64 ./build.sh --release
@@ -148,28 +148,28 @@ ARTEX_TARGETS=linux/amd64,windows/amd64 ./build.sh --release
 
 ---
 
-## 更新升级
+## Updating
 
-> 升级只换程序、不动数据：Postgres 数据卷 `pgdata`、`./data`（jwt.key / SQLite 等）、`./skills` 都会保留。**数据库迁移无需手动执行**——`artex` 每次启动会幂等重跑 `schema.sql`（含 `ADD COLUMN` / `CREATE INDEX IF NOT EXISTS`），即“重启即迁移”。升级前仍建议先备份 `./data` 与数据库。
+> Upgrades replace only the program, not the data: the Postgres data volume `pgdata`, `./data` (jwt.key / SQLite, etc.), and `./skills` are all preserved. **Database migrations need no manual step**—`artex` idempotently reruns `schema.sql` on every startup (including `ADD COLUMN` / `CREATE INDEX IF NOT EXISTS`), so "restart is migration". It is still advisable to back up `./data` and the database before upgrading.
 
-### 方式一：页面一键更新（推荐）
+### Option 1: One-click update in the UI (recommended)
 
-在 **系统配置** 页（侧边栏「系统配置」→ `/system/settings`）的**版本与更新**卡片里，可以直接检查并安装新版本，无需登录服务器。
+On the **System Settings** page (sidebar "System Settings" → `/system/settings`), the **Version & Updates** card lets you check for and install a new version directly, without logging in to the server.
 
-本仓库构建的程序固定从 `RuoJi6/ARTEX` 的最新正式 GitHub Release 检查更新，跳过草稿和预发布版本。旧版官方程序仍指向原作者仓库，因此首次切换必须手动安装本仓库构建的程序；以后发布更高的三段式版本即可通过页面升级。仅推送 main 或 Git 标签但未发布 Release，不会产生可在线安装的新版本。
+Builds from this repository always check for updates from the latest stable GitHub Release of `RuoJi6/ARTEX`, skipping drafts and pre-releases. Older official builds still point at the original author's repository, so the first switch must be done by manually installing a build from this repository; after that, publishing a higher three-part version enables in-page upgrades. Pushing to main or creating a Git tag without publishing a Release does not produce an installable online update.
 
-点「更新」后：下载当前平台的发布包 → 比对 Release 的 `SHA256SUMS` → 用 `-h` 冒烟测试新二进制 → 暂存为 `artex.new` → 程序退出，由 `start.sh` / `start.bat` 重新拉起并完成换装。页面会自动等到新版本上线后刷新。
+After clicking "Update": download the release package for the current platform → compare against the Release's `SHA256SUMS` → smoke test the new binary with `-h` → stage it as `artex.new` → the program exits, and `start.sh` / `start.bat` relaunches it to complete the swap. The page waits automatically for the new version to come online before refreshing.
 
-- **失败不会留下坏程序**：校验或冒烟不通过就丢弃暂存件、继续跑当前版本；换装后的新版若连续 3 次启动失败，会自动回滚到 `artex.old`（失败的那个留作 `artex.failed` 供排查）。
-- **随时可回退**：上一版本保留为 `artex.old`，卡片上有「回滚到上一版本」。注意数据库结构不会回退。
-- **更新会中断正在运行的任务**——更新即重启，请在空闲时进行。
-- **开发构建不给更新**：版本号是 `dev` 或 `git describe` 带后缀时禁用，避免正式版覆盖掉本地调试的二进制。
-- **Docker 下只换程序、不换镜像**：镜像里的 playwright / nmap 等工具链不会跟着升级，且 `docker compose up -d` 重建容器后会退回镜像自带的版本。要连镜像一起升级仍请用 `docker compose pull artex && docker compose up -d artex`。
-- 访问 GitHub 需要代理时，在同一页面配置**全局代理**即可，更新链路会走它。更新只从 GitHub 域名下载并强制 HTTPS。
+- **Failures leave no broken program**: if verification or the smoke test fails, the staged file is discarded and the current version keeps running; if the swapped-in new version fails to start 3 times in a row, it automatically rolls back to `artex.old` (the failed one is kept as `artex.failed` for troubleshooting).
+- **You can roll back at any time**: the previous version is kept as `artex.old`, and the card has "Roll back to previous version". Note that the database schema does not roll back.
+- **Updating interrupts running tasks**—an update is a restart, so do it while idle.
+- **Development builds are not offered updates**: disabled when the version is `dev` or `git describe` has a suffix, to avoid a stable release overwriting a local debug binary.
+- **Under Docker only the program is replaced, not the image**: toolchains such as playwright / nmap in the image do not upgrade with it, and recreating the container with `docker compose up -d` reverts to the image's bundled version. To upgrade the image too, still use `docker compose pull artex && docker compose up -d artex`.
+- If accessing GitHub requires a proxy, configure the **global proxy** on the same page; the update path uses it. Updates download only from GitHub domains and enforce HTTPS.
 
-### 维护者：通过 GitHub Actions 发布在线更新
+### Maintainers: publishing online updates via GitHub Actions
 
-发布工作流为 `.github/workflows/release.yml`。推送正式标签会触发构建，也可在 Actions → release → Run workflow 中输入已存在的标签重新执行失败的发布。标签必须是 `v主版本.次版本.修订号`，例如下例的 `v0.3.15`；后续版本必须高于用户正在运行的版本。
+The release workflow is `.github/workflows/release.yml`. Pushing a stable tag triggers a build; you can also go to Actions → release → Run workflow and enter an existing tag to rerun a failed release. Tags must be `v<major>.<minor>.<patch>`, such as `v0.3.15` in the example below; later versions must be higher than the version users are running.
 
 ```bash
 git push origin main
@@ -177,13 +177,13 @@ git tag v0.3.15
 git push origin v0.3.15
 ```
 
-工作流固定标签对应的提交，用 Node.js 22 导出前端，按照 `go.mod` 指定的 Go 版本编译内嵌前端的五个平台程序，并生成 ZIP 与 `SHA256SUMS`。AMD64 和 ARM64 镜像分别在 GitHub 原生 runner 上构建，连接临时 PostgreSQL 验证程序启动、版本和内嵌前端；两种架构都通过后发布多架构镜像的版本标签与 `latest`。镜像发布成功后上传完整 ZIP 和校验文件，最后公开 Release。已公开的同版本不允许覆盖，应发布新标签。
+The workflow pins the commit corresponding to the tag, exports the frontend with Node.js 22, builds the five-platform binaries with the embedded frontend using the Go version specified by `go.mod`, and generates ZIPs and `SHA256SUMS`. AMD64 and ARM64 images are built on GitHub's native runners; a temporary PostgreSQL verifies program startup, version, and embedded frontend; once both architectures pass, the multi-architecture image's version tag and `latest` are published. After the image is published successfully, the full ZIPs and checksum files are uploaded, and finally the Release is made public. An already-public version cannot be overwritten; publish a new tag instead.
 
-维护者需在本仓库 Settings → Secrets and variables → Actions 中配置变量 `ARTEX_DOCKER_IMAGE`（Docker Hub 用户名/镜像名）和 Secrets `DOCKERHUB_USERNAME`、`DOCKERHUB_TOKEN`（有镜像推送权限）。程序包通过 GitHub 自带 `GITHUB_TOKEN` 上传，镜像通过上述凭据推送到 Docker Hub。凭据只供工作流登录使用，不写入源码或镜像。镜像地址同时记录在 `.env.example` 和 Compose 默认值中。
+Maintainers must configure the variable `ARTEX_DOCKER_IMAGE` (Docker Hub username/image name) and the secrets `DOCKERHUB_USERNAME` and `DOCKERHUB_TOKEN` (with image push permission) in this repository's Settings → Secrets and variables → Actions. Program packages are uploaded via GitHub's built-in `GITHUB_TOKEN`, while images are pushed to Docker Hub with the credentials above. Credentials are used only for workflow login and are not written into source or images. The image address is also recorded in `.env.example` and the Compose defaults.
 
-### 已有 Docker 部署迁移到本仓库镜像
+### Migrating an existing Docker deployment to this repository's image
 
-在原部署目录中备份 `.env`、Compose 文件、`data/` 和 PostgreSQL 数据，保留原数据库卷和 skills 挂载。将 `.env` 的 `ARTEX_IMAGE` 设置为本仓库镜像地址、`ARTEX_TAG` 设置为目标版本；如果旧 Compose 仍写死原作者的镜像，可创建下列覆盖文件（已有覆盖文件时应合并 image 配置）：
+In the original deployment directory, back up `.env`, the Compose file, `data/`, and the PostgreSQL data, keeping the original database volume and skills mount. Set `.env`'s `ARTEX_IMAGE` to this repository's image address and `ARTEX_TAG` to the target version; if the old Compose file still hardcodes the original author's image, create the following override file (merge the image configuration if an override file already exists):
 
 ```yaml
 # docker-compose.override.yml
@@ -192,7 +192,7 @@ services:
     image: ${ARTEX_IMAGE}:${ARTEX_TAG:-latest}
 ```
 
-然后只更新应用容器：
+Then update only the application container:
 
 ```bash
 docker compose pull artex
@@ -201,12 +201,12 @@ curl --fail http://127.0.0.1:8787/api/health
 docker compose logs --tail=50 artex
 ```
 
-继续使用原部署目录和 Compose 项目名称，确保 `./data`、`./skills` 和 PostgreSQL 数据卷仍指向原数据。迁移后程序从 `RuoJi6/ARTEX` 检查在线更新；后续可用页面更新程序或上述命令更新整个镜像。
+Continue using the original deployment directory and Compose project name, ensuring `./data`, `./skills`, and the PostgreSQL data volume still point at the original data. After migration the program checks for online updates from `RuoJi6/ARTEX`; subsequent updates can use the in-page updater or the commands above to update the entire image.
 
-首次迁移已有 Docker 部署时，将已校验的新 ARM64 ZIP 解压到宿主机，备份原程序，然后只替换已有容器中的 `/app/artex`。例如现有容器名为 `artex-artex-1`：
+When migrating an existing Docker deployment for the first time, extract the verified new ARM64 ZIP on the host, back up the original program, and then replace only `/app/artex` in the existing container. For example, if the existing container is named `artex-artex-1`:
 
 ```bash
-# 在下载目录运行；先按 SHA256SUMS 核对下载的 ZIP，再解压。
+# Run in the download directory; first verify the downloaded ZIP against SHA256SUMS, then extract.
 sha256sum --ignore-missing --check SHA256SUMS
 unzip artex-0.3.15-linux-arm64.zip
 sudo docker stop artex-artex-1
@@ -216,55 +216,55 @@ sudo docker start artex-artex-1
 curl --fail http://127.0.0.1:8787/api/health
 ```
 
-这会保留现有数据库、data 和 skills 挂载。登录系统配置页检查更新源与版本。容器内替换的程序仍属于容器可写层，删除或重建容器会丢失替换结果；需要重建时应使用包含本仓库程序的镜像。程序回滚不回退数据库迁移，升级前请备份数据库和 data。
+This preserves the existing database, data, and skills mounts. Log in to the System Settings page to check the update source and version. The replaced program inside the container still belongs to the container's writable layer; deleting or recreating the container loses the replacement. When a rebuild is needed, use an image that contains this repository's program. Program rollback does not roll back database migrations, so back up the database and data before upgrading.
 
-### 方式二：一键更新脚本
+### Option 2: One-click update script
 
 ```bash
 cd ARTEX
 ./update.sh
 ```
 
-脚本先可选 `git pull` 拉取最新代码，再让你选 **① Docker 更新** 或 **② 本地编译更新**（与 `install.sh` 对应）：
+The script first optionally runs `git pull` for the latest code, then lets you choose **① Docker update** or **② local build update** (corresponding to `install.sh`):
 
-- **① Docker**：可指定目标镜像 tag（回车沿用 `.env` 的 `ARTEX_TAG`，缺省 `latest`）→ `docker compose pull` → `docker compose up -d`（换新镜像重启即自动迁移）。
-- **② 本地**：重建前端静态产物 → 重新编译 `./artex`（完成后重启进程生效）。
+- **① Docker**: optionally specify the target image tag (press Enter to reuse `.env`'s `ARTEX_TAG`, defaulting to `latest`) → `docker compose pull` → `docker compose up -d` (a new image restarts and migrates automatically).
+- **② Local**: rebuild the frontend static output → recompile `./artex` (restart the process to take effect).
 
-### 方式三：Docker Compose（手动）
+### Option 3: Docker Compose (manual)
 
 ```bash
 cd ARTEX
-git pull                       # 更新 compose / 脚本（可选）
-# 指定版本：在 .env 设 ARTEX_TAG=v0.3.15；不设则用 latest
+git pull                       # update compose / scripts (optional)
+# Pin a version: set ARTEX_TAG=v0.3.15 in .env; otherwise latest is used
 docker compose pull artex
-docker compose up -d artex     # 换新镜像重启 → 自动迁移 schema
-docker image prune -f          # 清理旧镜像（可选）
+docker compose up -d artex     # new image restarts → schema migration is automatic
+docker image prune -f          # clean up old images (optional)
 ```
 
-### 方式四：预编译二进制（Releases）
+### Option 4: Prebuilt binary (Releases)
 
-到 [Releases](https://github.com/RuoJi6/ARTEX/releases) 下载新版本 zip，停掉旧进程后覆盖 `artex` 与 `skills/`（保留你的 `config.json` 与 `data/`），重启即可：
+Go to [Releases](https://github.com/RuoJi6/ARTEX/releases), download the new version's zip, stop the old process, overwrite `artex` and `skills/` (keeping your `config.json` and `data/`), and restart:
 
 ```bash
-cp -r <解压目录>/skills ./ && cp <解压目录>/artex ./
+cp -r <extract-dir>/skills ./ && cp <extract-dir>/artex ./
 ./start.sh
 ```
 
-### 方式五：从源码编译
+### Option 5: Build from source
 
 ```bash
 git pull
 cd web && npm ci && npm run build:static && cd ..
 cp -r web/out server/webui/dist
 CGO_ENABLED=0 go build -tags embedui -o artex ./cmd/artex
-# 重启 ./start.sh
+# Restart ./start.sh
 ```
 
 ---
 
-## 配置
+## Configuration
 
-**数据库**（`config.json`，或用环境变量 `ARTEX_PG_DSN` 覆盖）：
+**Database** (`config.json`, or override with the `ARTEX_PG_DSN` environment variable):
 
 ```json
 {
@@ -276,18 +276,18 @@ CGO_ENABLED=0 go build -tags embedui -o artex ./cmd/artex
 }
 ```
 
-**LLM**：`export ANTHROPIC_API_KEY=sk-...`（或 `OPENAI_API_KEY`），也可在 UI 的「LLM 配置」页填写。
-可选：`ARTEX_LLM_PROVIDER` / `ARTEX_LLM_MODEL` / `ARTEX_LLM_BASE_URL` / `ARTEX_LLM_PROXY`。
+**LLM**: `export ANTHROPIC_API_KEY=sk-...` (or `OPENAI_API_KEY`); you can also fill it in on the UI's "LLM" page.
+Optional: `ARTEX_LLM_PROVIDER` / `ARTEX_LLM_MODEL` / `ARTEX_LLM_BASE_URL` / `ARTEX_LLM_PROXY`.
 
-**并发**：每个任务的 work agent 数在「系统设置」里配置（默认 3）。
+**Concurrency**: the number of work agents per task is configured in "System Settings" (default 3).
 
-**常用参数**：`./start.sh -addr :8787 -proxy :8788`（`-addr` 前端+API，`-proxy` 流量录制代理）。启动脚本会把参数原样透传给 `artex`。
+**Common arguments**: `./start.sh -addr :8787 -proxy :8788` (`-addr` frontend + API, `-proxy` traffic recording proxy). The startup script passes arguments through to `artex` unchanged.
 
-### 反向代理部署（HTTPS / 只开放 443）
+### Reverse-proxy deployment (HTTPS / expose only 443)
 
-前端和 API/SSE 都由同一个后端端口（默认 `:8787`）提供，实时活动流默认走**同源**地址，因此**无需配置 `NEXT_PUBLIC_SSE_BASE`**，公网只开放 443、把 8787 留在内网即可。
+The frontend and API/SSE are both served by the same backend port (default `:8787`), and the live activity stream defaults to the **same-origin** address, so **no `NEXT_PUBLIC_SSE_BASE` is needed**; expose only 443 publicly and keep 8787 on the internal network.
 
-SSE 是长连接 + 持续推送，反代**必须关闭缓冲**，否则浏览器能连上却收不到事件（表现为活动流一直转圈）。Nginx 示例：
+SSE is a long-lived connection with continuous pushes, so the reverse proxy **must disable buffering**; otherwise the browser can connect but receives no events (the activity stream spins forever). Nginx example:
 
 ```nginx
 server {
@@ -300,7 +300,7 @@ server {
         proxy_set_header Host $host;
         proxy_set_header X-Forwarded-Proto $scheme;
 
-        # SSE 关键项：关缓冲、长超时、HTTP/1.1
+        # Key SSE settings: disable buffering, long timeout, HTTP/1.1
         proxy_buffering off;
         proxy_cache off;
         proxy_read_timeout 3600s;
@@ -310,67 +310,67 @@ server {
 }
 ```
 
-> 仅当 SSE 需要走与页面不同的来源（如独立子域）时，才在**构建期**设置 `NEXT_PUBLIC_SSE_BASE`（该变量在 `next build` 时固化进静态包，容器运行时再设无效）。
+> Only when SSE needs to come from a different origin than the page (such as a dedicated subdomain) should you set `NEXT_PUBLIC_SSE_BASE` at **build time** (the variable is fixed into the static bundle during `next build`; setting it at container runtime has no effect).
 
 ---
 
 
 
-## 开发
+## Development
 
-### 手动漏洞复测
+### Manual vulnerability retest
 
-任务详情的「复测」页签可分页选择本任务的漏洞、查看历次结论和证据，并手动发起复测。启动后保留当前页签，显示转圈图标和「复测中」；确认修复后同步更新漏洞状态。
+The "Retest" tab in task details lets you page through the task's findings, view each conclusion and evidence, and start a manual retest. After starting, the current tab is kept and a spinner plus "Retesting" is shown; once a fix is confirmed, the finding status is updated.
 
-在漏洞列表每行操作区点击「复测」，或在漏洞详情的「漏洞复测」区域点击「发起复测」，填写可选的修复版本、测试条件或限制，系统会创建独立的复测 Agent 会话，启动后保留当前页面。列表的平铺、按任务分组和资产视图均支持该入口；复测运行时显示转圈图标和「复测中」，需要查看时点击进入对应会话，结束后恢复「复测」。复测无需重新启动原扫描任务，结论分为「仍可复现」「已修复」「无法确认」，每次的结论、证据和会话链接保存在漏洞详情中。
+Click "Retest" in each row's action area of the findings list, or "Start retest" in the "Vulnerability Retest" area of a finding detail, and fill in the optional fixed version and test conditions or limitations. The system creates an independent retest Agent session and keeps the current page after starting. This entry point is available in the flat list, by-task grouping, and asset views; while a retest runs, a spinner and "Retesting" are shown, and clicking enters the corresponding session; when it finishes, the "Retest" action is restored. Retesting does not require restarting the original scan task; conclusions are "Still reproducible", "Fixed", or "Unable to confirm", and each conclusion, evidence, and session link is saved in the finding detail.
 
-新版后端首次启动会预置可编辑的「漏洞复测」（`retester`）Agent，可在 Agent 管理中配置提示词、LLM、运行预算和工具。默认使用其绑定的 LLM，未绑定则使用全局激活配置。复测会话成功完成且结论为「已修复」时，系统自动将漏洞处置状态改为「已修复」；执行中、失败、停止或其他结论保留原状态。原始证据和报告始终保留。也可在状态下拉菜单中手动选择「已修复」。同一漏洞正在复测时复用已有会话，停止、失败或服务重启后可重新发起。
+On first startup, a new backend seeds an editable "Vulnerability Retest" (`retester`) Agent, whose prompt, LLM, run budget, and tools can be configured in Agents. It uses its bound LLM by default, or the globally active configuration if none is bound. When a retest session completes successfully with the conclusion "Fixed", the system automatically changes the finding's disposition status to "Fixed"; running, failed, stopped, or other conclusions keep the original status. Original evidence and reports are always retained. You can also manually select "Fixed" in the status dropdown. If the same finding is already being retested, the existing session is reused; after stopping, failure, or a service restart, a retest can be started again.
 
-本版历史记录通过漏洞详情和会话查看，暂未纳入漏洞报告导出或任务归档包，也未自动关联流量包。演示模式只生成明确标注的模拟记录，不请求真实目标。
+In this version, history is viewed through finding details and sessions; it is not yet included in finding report exports or task archive packages, nor automatically linked to traffic packets. Demo mode generates only clearly labeled simulated records and does not contact real targets.
 
-### 本地运行与测试
+### Local run and tests
 
 ```bash
-./dev.sh    # 后端(:8787) + 流量代理(:8788) + 前端 next dev(:5173) → http://localhost:5173
+./dev.sh    # backend (:8787) + traffic proxy (:8788) + frontend next dev (:5173) → http://localhost:5173
 ```
 
-- 后端：`go run ./cmd/artex`（不带 `-tags embedui` 则不内嵌前端）
-- 前端：`cd web && npm run dev`（`/api` 反代到后端，带热更新）
-- 测试：`go test ./...`
-- Mock 预览（无后端）：`cd web && NEXT_PUBLIC_MOCK=1 npm run dev`
+- Backend: `go run ./cmd/artex` (without `-tags embedui`, the frontend is not embedded)
+- Frontend: `cd web && npm run dev` (`/api` is proxied to the backend, with hot reload)
+- Tests: `go test ./...`
+- Mock preview (no backend): `cd web && NEXT_PUBLIC_MOCK=1 npm run dev`
 
 ---
 
-## 系统技术架构
+## System architecture
 
-ARTEX 是一套 **LLM 多 agent 驱动的自主渗透系统**：Go 单体后端（内嵌 Next.js 前端）+ PostgreSQL，agent 能力由 [`norma`](https://github.com/Autumn-27/norma) SDK 提供（`agentcore` / `tool` / `permission` / `harness` / `memory` / `transcript`）。核心是**双图架构**，以及围绕它的两条自主性机制：**worker 间过程级信息交换**与 **planner 多轮共享 todolist 稳定攻击链路**。
+ARTEX is an **LLM multi-agent-driven autonomous penetration system**: a Go monolith backend (with the Next.js frontend embedded) + PostgreSQL, with agent capabilities provided by the [`norma`](https://github.com/Autumn-27/norma) SDK (`agentcore` / `tool` / `permission` / `harness` / `memory` / `transcript`). At its core is a **dual-graph architecture**, plus two autonomy mechanisms around it: **process-level information exchange between workers** and a **planner shared multi-round todolist that stabilizes the attack chain**.
 
-### 总体分层
+### Overall layering
 
 ```mermaid
 flowchart TB
-  subgraph FE["前端 Next.js（go:embed 内嵌单二进制）"]
-    UI["仪表盘 · 任务 · 资产 · 覆盖图 · 流量 · 工作空间 · 系统配置"]
+  subgraph FE["Frontend Next.js (embedded single binary via go:embed)"]
+    UI["Dashboard · Tasks · Assets · Coverage Map · Traffic · Workspace · System Settings"]
   end
-  subgraph SRV["server（Go net/http）"]
-    API["REST /api/*　JWT 鉴权　SSE"]
-    ENG["engine 调度循环"]
-    MGR["Manager　任务/引擎/store 生命周期"]
+  subgraph SRV["server (Go net/http)"]
+    API["REST /api/*　JWT auth　SSE"]
+    ENG["engine scheduling loop"]
+    MGR["Manager　task/engine/store lifecycle"]
   end
-  subgraph AG["agent（norma SDK）"]
-    GO["goals　目标分解 + 提取范围"]
-    PL["planner　规划者（唯一意图生成者）"]
-    WK["worker　执行者 ×N"]
-    MA["mainagent　人在环路"]
+  subgraph AG["agent (norma SDK)"]
+    GO["goals　goal decomposition + scope extraction"]
+    PL["planner　the only intent producer"]
+    WK["worker　executor ×N"]
+    MA["mainagent　human-in-the-loop"]
   end
   subgraph DB["PostgreSQL"]
-    AGRAPH["资产图　assets / companies / task_scope"]
-    EGRAPH["探索图　exploration_nodes / anchors / activity"]
+    AGRAPH["Asset graph　assets / companies / task_scope"]
+    EGRAPH["Exploration graph　exploration_nodes / anchors / activity"]
   end
-  subgraph SUB["支撑子系统"]
-    PROXY["流量记录代理　MITM + CA 留痕"]
-    GUARD["guard / intercept　工具审批门"]
-    ENR["enrich　DNS / HTTP 异步补全"]
+  subgraph SUB["Supporting subsystems"]
+    PROXY["Traffic recording proxy　MITM + CA evidence"]
+    GUARD["guard / intercept　tool approval gate"]
+    ENR["enrich　async DNS / HTTP completion"]
     EXT["MCP · skills · memory · report"]
   end
 
@@ -384,7 +384,7 @@ flowchart TB
   WK --> DB
   MA --> DB
   GO --> DB
-  WK -->|"Bash / HTTP 全程留痕"| PROXY
+  WK -->|"Bash / HTTP fully recorded"| PROXY
   WK --> GUARD
   WK --> ENR
   PL -.-> EXT
@@ -392,38 +392,38 @@ flowchart TB
   MA -.-> EXT
 ```
 
-| 层 | 职责 |
+| Layer | Responsibility |
 | --- | --- |
-| **前端** | Next.js 静态导出，`go:embed` 内嵌进单二进制；可视化任务/资产/探索链路/覆盖图，人在环路对话 |
-| **server** | `net/http` 路由 + JWT 鉴权 + SSE；`Manager` 托管任务、引擎、DB store 的生命周期 |
-| **engine** | 每任务一个 `plannerLoop` + N 个 worker goroutine；意图领取、超时/暂停/drain |
-| **agent** | goals / planner / worker / mainagent，`ToolSet` 把双图暴露成 LLM 工具 |
-| **db** | 双图的 Postgres 落地（pgx）；schema 随 `go:embed` 每次启动幂等建表 |
-| **支撑** | 记录型 MITM 代理、审批门、异步补全、MCP/技能/记忆/报告 |
+| **Frontend** | Next.js static export, embedded into the single binary via `go:embed`; visualizes tasks/assets/exploration graph/coverage map, human-in-the-loop chat |
+| **server** | `net/http` routing + JWT auth + SSE; `Manager` manages the lifecycle of tasks, engines, and the DB store |
+| **engine** | One `plannerLoop` + N worker goroutines per task; intent claiming, timeout/pause/drain |
+| **agent** | goals / planner / worker / mainagent; `ToolSet` exposes the dual graph as LLM tools |
+| **db** | Postgres persistence of the dual graph (pgx); schema is idempotently created on every startup via `go:embed` |
+| **support** | Recording MITM proxy, approval gate, async enrichment, MCP/skills/memory/report |
 
-### 双图架构：探索图 + 资产图
+### Dual-graph architecture: exploration graph + asset graph
 
-系统把「**目标是什么**」和「**测到了什么程度**」拆成两张相互独立、又通过锚点相连的图：
+The system splits "**what the target is**" and "**how far it has been tested**" into two independent graphs connected by anchors:
 
-- **资产图（Asset Graph，全局共享）**：跨任务同一份的资产真值库。节点为 `root_domain / subdomain / ip / service / app / endpoint`，归属公司；域名→子域→服务→端点的父子关系与去重 key 全部由程序计算，agent 只提交原始信息。
-- **探索图（Exploration Graph，每任务独立）**：一次任务的“思考与推进”过程。节点为 `goal（目标）/ intent（意图）/ fact（事实）/ finding（漏洞）/ hint（提示）`，靠 `spawns / derived_from / yields / proves` 等边连成**血缘链**，回答“哪个方向派生自哪些事实、产出了什么”。
-- **两图靠锚点相连**：`exploration_anchors(node_id, asset_id)` 把意图/事实/漏洞锚定到具体资产上——于是既能从“探索方向”看它打的是哪些资产，也能从“某个资产”反查它在本任务被哪些意图测过、得出过哪些事实。这也支撑了**资产测试覆盖度**与**资产覆盖图**（范围内资产 + 已测高亮）。
+- **Asset graph (global, shared)**: a single source of truth for assets shared across tasks. Nodes are `root_domain / subdomain / ip / service / app / endpoint`, owned by a company; the parent-child relationships from domain → subdomain → service → endpoint and all deduplication keys are computed by the program, while agents submit only raw information.
+- **Exploration graph (per task, independent)**: the "thinking and progress" process of a single task. Nodes are `goal / intent / fact / finding / hint`, connected into **lineage chains** by edges such as `spawns / derived_from / yields / proves`, answering "which direction derived from which facts, and what it produced".
+- **The two graphs are connected by anchors**: `exploration_anchors(node_id, asset_id)` anchors intents/facts/findings to specific assets—so you can both see which assets an "exploration direction" targeted, and, from "a given asset", trace which intents tested it in this task and what facts were produced. This also supports **asset test coverage** and the **asset coverage map** (in-scope assets + tested highlighted).
 
 ```mermaid
 flowchart LR
-  subgraph EG["探索图（每任务独立 · 推进链）"]
+  subgraph EG["Exploration graph (per task · progress chain)"]
     direction TB
-    G["goal 目标"]
-    I1["intent 意图 A"]
-    F1["fact 事实"]
-    I2["intent 意图 B"]
-    FD["finding 漏洞"]
+    G["goal"]
+    I1["intent A"]
+    F1["fact"]
+    I2["intent B"]
+    FD["finding"]
     G -->|spawns| I1
     I1 -->|yields| F1
     F1 -->|derived_from| I2
     I2 -->|proves| FD
   end
-  subgraph AG["资产图（全局共享 · 真值库）"]
+  subgraph AG["Asset graph (shared globally · source of truth)"]
     direction TB
     RD["root_domain"]
     SD["subdomain"]
@@ -437,124 +437,124 @@ flowchart LR
   FD -. anchor .-> EP
 ```
 
-> 分工：**planner** 读探索图态势、判目标、只在有未覆盖的新方向时派**意图**进 frontier；**worker** 领**一条意图**、用真实工具执行、把新资产/事实/漏洞写回两图后即停。资产图是共享事实，探索图是每任务的推进链。
+> Division of labor: **planner** reads the exploration graph's state, judges goals, and dispatches **intents** to the frontier only when there are uncovered new directions; **worker** claims **one intent**, executes it with real tools, writes new assets/facts/findings back to both graphs, and stops. The asset graph is shared truth; the exploration graph is each task's progress chain.
 
-### 引擎与意图生命周期（一次探索的闭环）
+### Engine and intent lifecycle (the loop of one exploration)
 
-引擎是**事件驱动**的闭环：图一变就唤醒 planner，planner 派意图，worker 领意图执行并写回，写回又触发下一轮——直到目标被证明（`prove_goal`）。
+The engine is an **event-driven** loop: a graph change wakes the planner, the planner dispatches intents, workers claim and execute intents and write back, and the write-back triggers the next round—until the goal is proven (`prove_goal`).
 
 ```mermaid
 sequenceDiagram
   autonumber
-  participant EV as 图变更 debounce
+  participant EV as Graph change debounce
   participant P as planner
-  participant FR as frontier 意图队列
+  participant FR as frontier intent queue
   participant W as worker
-  participant PX as 记录代理
-  participant DB as 双图 + activity
+  participant PX as Recording proxy
+  participant DB as Dual graph + activity
 
-  EV-->>P: 唤醒
-  P->>DB: 读态势(graph_overview 预取 + coverage/scope)
-  P->>FR: 派 0..N 个意图(带 asset_ids)
-  Note over P,FR: 大多数唤醒派 0 个——无新方向即结束
-  W->>FR: claimNext 领一条意图
-  W->>DB: 取意图 asset_ids 的原始资产作为初始信息
-  W->>PX: 真实工具执行(Kali / Bash / HTTP)
-  PX-->>W: 响应(全程留痕 + CA 验证)
-  W->>DB: 写回 fact / asset / finding + 每步 activity
-  DB-->>EV: 图变更
-  EV-->>P: 再次唤醒(闭环)
+  EV-->>P: wake
+  P->>DB: read state (graph_overview prefetch + coverage/scope)
+  P->>FR: dispatch 0..N intents (with asset_ids)
+  Note over P,FR: Most wakes dispatch 0—no new direction means done
+  W->>FR: claimNext claims one intent
+  W->>DB: fetch the raw assets for the intent's asset_ids as initial information
+  W->>PX: execute real tools (Kali / Bash / HTTP)
+  PX-->>W: response (fully recorded + CA verification)
+  W->>DB: write back fact / asset / finding + activity per step
+  DB-->>EV: graph change
+  EV-->>P: wake again (loop)
 ```
 
-### worker 间的过程级信息交换
+### Process-level information exchange between workers
 
-一次深入的探索里，很多有价值的观察（某个报错、某段响应、某个隐藏参数）出现在一个 worker 的**执行过程**中，却未必被写成正式 fact。为避免重复劳动、让链路上的 worker 能站在彼此的肩膀上，worker 具备**跨 work 检索过程**的能力：
+In a deep exploration, many valuable observations (an error, a response fragment, a hidden parameter) appear during a worker's **execution process** but are not necessarily written as a formal fact. To avoid duplicated work and let workers in the chain stand on each other's shoulders, workers can **search other work's processes across the work**:
 
-- `search_all_worker_traces(q)`：在**本任务其他 work 的执行过程**里按关键字检索（自动排除自己这条意图的步骤），命中项带 `intent_id`；
-- `list_worker_traces` / `get_worker_trace(intent_id, step_ids=[…])`：先看有哪些 work 跑过，再取某个 work 具体几步的完整内容做细节交换。
+- `search_all_worker_traces(q)`: search by keyword in **the execution processes of other work in this task** (automatically excluding steps from the worker's own intent); matches carry an `intent_id`;
+- `list_worker_traces` / `get_worker_trace(intent_id, step_ids=[…])`: first see which work has run, then fetch the full content of specific steps of a work for detailed exchange.
 
-这样即便探索图上还没有对应的 fact，后续 worker 也能复用他人过程中的观察——**信息在 worker 之间以“执行过程”为粒度流动**，而边界不变（每个 worker 仍只做自己领到的那条意图）。
+So even when the exploration graph has no corresponding fact yet, later workers can reuse observations from others' processes—**information flows between workers at the granularity of "execution process"**, while boundaries stay unchanged (each worker still only handles the intent it claimed).
 
 ```mermaid
 flowchart LR
-  WA["worker A（意图 #12）"] -->|"每步 activity"| ACT[("探索图 · activity 过程库")]
-  WB["worker B（意图 #34）"] -->|"每步 activity"| ACT
-  WC["worker C（意图 #56）"] ==>|"1) search_all_worker_traces(q)"| ACT
-  ACT ==>|"2) 命中 A/B 的步骤（排除自己）"| WC
+  WA["worker A (intent #12)"] -->|"activity per step"| ACT[("Exploration graph · activity process store")]
+  WB["worker B (intent #34)"] -->|"activity per step"| ACT
+  WC["worker C (intent #56)"] ==>|"1) search_all_worker_traces(q)"| ACT
+  ACT ==>|"2) matches steps from A/B (excluding self)"| WC
   WC ==>|"3) get_worker_trace(id, step_ids)"| ACT
-  ACT ==>|"4) 返回完整过程内容"| WC
+  ACT ==>|"4) returns full process content"| WC
 ```
 
-### planner 多轮共享 todolist → 稳定的攻击链路
+### Planner shared multi-round todolist → a stable attack chain
 
-真实攻击链往往是**有前后依赖的多步序列**（如：发现注入点 → 拿到凭据 → 横向 → 提权），一次性把这些并行派下去只会乱套。planner 因此持有一份**按任务保留、跨唤醒共享的规划待办（todolist）**：
+Real attack chains are often **multi-step sequences with dependencies** (e.g., find an injection point → obtain credentials → pivot → escalate). Dispatching all of these in parallel at once only causes chaos. The planner therefore keeps a **planning todo list preserved per task and shared across wakes**:
 
-- planner 是事件驱动的——图一变就被唤醒，但**每次唤醒是全新会话**；共享的 todolist 让它把一条串行利用链**记录一次**、然后在后续多轮里**按依赖逐步派意图**，而不是把整条链在一轮里全部前置展开；
-- 每轮只对「前置步骤已完成、其依赖的 fact 已存在」的下一步派意图，并随进展更新清单（把已被 fact 满足的步骤标完成）。
+- The planner is event-driven—woken whenever the graph changes, but **each wake is a fresh session**; the shared todolist lets it **record a serial exploitation chain once** and then **dispatch intents step by step by dependency** over subsequent rounds, instead of front-loading the entire chain in one round;
+- Each round dispatches an intent only for the next step whose "prerequisites are complete and whose dependent facts exist", and updates the list as progress is made (marking steps satisfied by facts as done).
 
 ```mermaid
 flowchart TB
-  subgraph TODO["共享 todolist（按任务保留 · 跨唤醒常驻）"]
+  subgraph TODO["Shared todolist (per task · persists across wakes)"]
     direction LR
-    T1["1 注入点　[已完成]"]
-    T2["2 取凭据　[进行中]"]
-    T3["3 横向　[待前置]"]
-    T4["4 提权　[待前置]"]
-    T1 -.前置满足.-> T2 -.-> T3 -.-> T4
+    T1["1 injection point　[done]"]
+    T2["2 obtain credentials　[in progress]"]
+    T3["3 pivot　[awaiting prerequisite]"]
+    T4["4 escalate　[awaiting prerequisite]"]
+    T1 -.prerequisite met.-> T2 -.-> T3 -.-> T4
   end
-  R1["第 1 轮唤醒　派意图①"] --> T1
-  R2["第 2 轮（①产出 fact）　派意图②"] --> T2
-  R3["第 3 轮（②产出 fact）　派意图③"] --> T3
+  R1["Round 1 wake　dispatch intent ①"] --> T1
+  R2["Round 2 (① produced a fact)　dispatch intent ②"] --> T2
+  R3["Round 3 (② produced a fact)　dispatch intent ③"] --> T3
 ```
 
-于是攻击链在“事件驱动 + 无状态会话”的环境下依然**稳定推进、不重复、不错序**——这是 ARTEX 能自主走完多步利用链的关键。
+Thus the attack chain still **advances stably, without duplication or misordering** in an "event-driven + stateless session" environment—this is the key to ARTEX autonomously completing multi-step exploitation chains.
 
 ---
 
-## 交流群
+## Community
 
-扫码关注微信公众号 **SecSentry**，在公众号后台私信即可入群交流。
+Scan the QR code to follow the WeChat official account **SecSentry**, then send a private message to the account to join the community.
 
 <div align="center">
 
-<img src="screenshots/wx.png" alt="微信公众号 SecSentry" width="480" />
+<img src="screenshots/wx.png" alt="WeChat official account SecSentry" width="480" />
 
 </div>
 
 ---
-## 参考
+## References
 
 https://github.com/oritera/Cairn
 
 
-## 许可与免责声明
+## License and disclaimer
 
-### 开源协议
+### Open-source license
 
-本项目采用 **GNU Affero General Public License v3.0（AGPL-3.0）** 授权，完整条款见仓库根目录的 [LICENSE](LICENSE) 文件。
+This project is licensed under the **GNU Affero General Public License v3.0 (AGPL-3.0)**; the full terms are in the [LICENSE](LICENSE) file at the repository root.
 
-这意味着任何人都可以自由使用、修改和分发本项目，但**衍生作品必须同样以 AGPL-3.0 开源**；特别地，**若你修改本项目并通过网络（如部署为在线服务）向用户提供，也必须向这些用户公开对应的完整源码**。
+This means anyone may freely use, modify, and distribute the project, but **derivative works must also be open-sourced under AGPL-3.0**; in particular, **if you modify this project and provide it to users over a network (for example, by deploying it as an online service), you must also make the corresponding complete source code available to those users**.
 
-> ⚠️ **重要提示**：开源协议本身不限制软件的使用用途。以下的「使用限制」与「免责声明」是作者对使用者的额外约定与郑重声明，请务必遵守。
+> ⚠️ **Important**: the open-source license itself does not restrict the purposes for which the software may be used. The "usage restrictions" and "disclaimer" below are the author's additional stipulations and solemn statement to users, and must be observed.
 
-**ARTEX 仅供个人学习、代码研究与本地技术验证使用，不得用于对任何线上系统或网站发起实际测试。**
+**ARTEX is for personal learning, code study, and local technical validation only; it must not be used to conduct actual testing against any online system or website.**
 
-### 允许使用范围
+### Permitted use
 
-- 仅可用于**阅读、学习与研究本项目源码**，以及在**本地隔离环境**中进行技术原理验证；
-- 适用于个人学习、学术研究、代码审阅等非攻击性用途。
+- Only for **reading, learning, and studying this project's source code**, and for validating technical principles in a **local isolated environment**;
+- Suitable for non-offensive purposes such as personal learning, academic research, and code review.
 
-### 禁止事项
+### Prohibitions
 
-- **严禁使用本工具对任何网站、线上服务或联网系统发起扫描、探测、利用或攻击**（无论是否获得授权、是否为自有资产）；
-- 严禁将本工具用于任何实际的渗透测试、攻防对抗或生产环境；
-- 严禁将本工具用于非法入侵、数据窃取、勒索、拒绝服务或任何破坏性、犯罪性活动；
-- 严禁利用本工具从事违反所在国家/地区法律法规的行为。
+- **It is strictly forbidden to use this tool to scan, probe, exploit, or attack any website, online service, or networked system** (whether or not authorized, and whether or not it is your own asset);
+- It is strictly forbidden to use this tool for any actual penetration testing, red-team/blue-team exercises, or production environments;
+- It is strictly forbidden to use this tool for illegal intrusion, data theft, extortion, denial of service, or any destructive or criminal activity;
+- It is strictly forbidden to use this tool to engage in any conduct that violates the laws and regulations of your country/region.
 
-### 合规责任
+### Compliance responsibility
 
-使用者须自行遵守所在国家/地区关于网络安全、数据保护与计算机犯罪的全部法律法规（在中国大陆包括但不限于《网络安全法》《数据安全法》《个人信息保护法》及相关司法解释）。**因使用本工具产生的一切法律责任与后果，均由使用者自行承担。**
+Users must comply with all laws and regulations of their country/region concerning cybersecurity, data protection, and computer crime (in mainland China, including but not limited to the Cybersecurity Law, Data Security Law, Personal Information Protection Law, and related judicial interpretations). **All legal liability and consequences arising from the use of this tool are borne solely by the user.**
 
-### 免责声明
+### Disclaimer
 
-本项目按“现状（AS IS）”提供，不附带任何明示或默示的担保。作者及贡献者不对使用本工具（无论使用方式是否得当）所导致的任何直接或间接损失、数据丢失、系统损坏或法律纠纷承担责任。**下载、安装或使用本项目，即表示你已阅读、理解并同意上述全部条款。**
+This project is provided "AS IS" without any express or implied warranty. The author and contributors are not liable for any direct or indirect loss, data loss, system damage, or legal dispute caused by using this tool (whether or not used properly). **By downloading, installing, or using this project, you acknowledge that you have read, understood, and agreed to all the terms above.**

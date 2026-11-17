@@ -230,7 +230,7 @@ database password.
 | Container health | `healthy` |
 | Node / Playwright MCP / CLI | `v22.23.2`, `0.0.85`, `0.1.24` |
 | Chromium launch | `browser: ok` (headless, one page) |
-| Browser MCP discovery | `[mcp] browser 发现 25 个工具并已缓存` |
+| Browser MCP discovery | `[mcp] browser discovered 25 tools and cached them` |
 | Puppeteer + bundled Chromium | `puppeteer: ok` |
 | `nmap -sS` as root | raw SYN scan completed |
 | `ping` | ICMP echo worked |
@@ -251,7 +251,7 @@ Response:
 HTTP/1.1 401 Unauthorized
 Content-Type: application/json
 
-{"error":"用户名或密码错误"}
+{"error":"incorrect username or password"}
 ```
 
 There was no `uid=`/`gid=` output and no `captcha` response field. The handler
