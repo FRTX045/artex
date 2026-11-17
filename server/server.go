@@ -1608,6 +1608,11 @@ var (
 func parseTarget(text string) (scheme, host string, port int, ok bool) {
 	text = strings.TrimSpace(text)
 	if m := reURL.FindString(text); m != "" {
+		// The URL is often lifted from prose ("In scope: https://example.com,
+		// https://app.example.com"). The regex captures the trailing punctuation,
+		// which would otherwise become part of the hostname and pollute the seeded
+		// asset/scope with "example.com,".
+		m = strings.TrimRight(m, ".,;:!?)]}\"'")
 		if u, err := url.Parse(m); err == nil && u.Hostname() != "" {
 			scheme = strings.ToLower(u.Scheme)
 			host = strings.ToLower(u.Hostname())
