@@ -50,7 +50,7 @@ function fmtTime(value?: string) {
 function source(row: InterceptApprovalRow) {
   if (row.decision_source) return row.decision_source;
   if (row.rule_id) return "rule";
-  return row.reason?.startsWith("[模型]") ? "model" : "unknown";
+  return row.reason?.startsWith("[模型]") ? "model" : "unknown"; // "[模型]" is a stored prefix; keep it in Chinese
 }
 
 function originLabel(row: InterceptApprovalRow) {
