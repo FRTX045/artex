@@ -742,8 +742,8 @@ func (s *Server) seedReporterAgent() {
 	if exist, _ := s.m.pg.GetAgentByKey("reporter"); exist != nil {
 		return // key 已被占用(用户手建过)——不覆盖
 	}
-	a, err := s.m.pg.CreateAgent("reporter", "报告撰写",
-		"漏洞详细报告撰写：发现漏洞时自动触发，查取证据与执行过程后写 Markdown 报告并回写。")
+	a, err := s.m.pg.CreateAgent("reporter", "Reporter",
+		"Writes a detailed vulnerability report. Triggered automatically when a finding is recorded; reads the evidence and execution trace, then writes a Markdown report and saves it back.")
 	if err != nil {
 		log.Printf("[reporter] 创建 agent 失败: %v", err)
 		return
