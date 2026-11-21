@@ -496,6 +496,7 @@ func (s *Server) seedOrchestrationTools() {
 	s.seedAutoReportFindingBinding()
 	s.unbindGoalMetDefault()
 	s.reseedGoalsPrompt()             // goals 提示词加入「抽操作约束」步 → 旧库追加一版新默认(一次性)
+	s.reseedEnglishPrompts()          // auto / pentest / reporter 提示词译为英文 → 旧库追加一版英文默认(一次性)
 	s.reseedMainAgentPrompt()         // mainagent 提示词加入「目标达成后 add_intent 反问是否建目标」(一次性)
 	s.reseedPlannerPrompt()           // planner 提示词:重写「0 意图」正当理由 + 加量化验收核对(一次性)
 	s.reseedWorkerPrompt()            // worker 提示词:加否定结论证据门槛(一次性)
@@ -591,6 +592,38 @@ func (s *Server) reseedGoalsPrompt() {
 		return
 	}
 	log.Printf("[prompts] goals 提示词已追加新默认版本(加入抽操作约束步,一次性)")
+}
+
+// reseedEnglishPrompts appends the current English defaults as a new version for the built-in
+// agents whose prompts were translated (auto, pentest) and for the reporter agent. Same mechanism
+// as reseedGoalsPrompt: the old Chinese versions stay in history, and this runs once per flag.
+// Note: this replaces the active prompt text on existing installs, including any user edits made
+// to these prompts, which can be restored from the version history.
+func (s *Server) reseedEnglishPrompts() {
+	const flag = "builtin_prompts_english_v1"
+	if v, _, _ := s.m.pg.GetSetting(flag); v == "true" {
+		return
+	}
+	defer func() { _ = s.m.pg.SetSetting(flag, "true") }() // try only once, whether or not it succeeds
+	targets := []struct{ key, tmpl string }{
+		{"auto", agent.BuiltinPromptSeeds()["auto"]},
+		{"pentest", agent.BuiltinPromptSeeds()["pentest"]},
+		{"reporter", agent.ReporterDefaultPrompt},
+	}
+	for _, t := range targets {
+		a, err := s.m.pg.GetAgentByKey(t.key)
+		if err != nil || a == nil || t.tmpl == "" {
+			continue // fresh DB: SeedPromptIfEmpty already seeds the current default
+		}
+		if cur, err := s.m.pg.CurrentPrompt(a.ID); err == nil && cur == t.tmpl {
+			continue
+		}
+		if _, err := s.m.pg.ResetPromptToDefault(a.ID, t.tmpl); err != nil {
+			log.Printf("[prompts] %s 提示词重刷为英文默认失败: %v", t.key, err)
+			continue
+		}
+		log.Printf("[prompts] %s 提示词已追加英文默认版本(一次性)", t.key)
+	}
 }
 
 // reseedMainAgentPrompt 把 mainagent 提示词刷成【当前代码默认】——默认正文新增了「目标全部
